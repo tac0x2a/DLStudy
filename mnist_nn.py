@@ -45,7 +45,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 # Batch Calculation
-BATCH_SIZE = 1000
+BATCH_SIZE = 10000
 b = int(rand() * (TRAIN_SAMPLE-BATCH_SIZE))
 e = b + BATCH_SIZE
 
@@ -57,8 +57,8 @@ z2 = [ np.append(sigmoid(a), 1) for a in a2 ]
 a3 = np.dot(z2, W32)
 
 print("NN Output:", a3.shape) # Result
-result = [ (t_train[b+i], np.argmax(a3[i])) for i in range(0, BATCH_SIZE) ]
-
-print("NN Correct answer rate: ", sum(1 for a,e in result if a == e ) / len(result) * 100.0, "%")
+correct_count = sum(t_train[b:b+BATCH_SIZE] == [np.argmax(a) for a in a3 ])
+rate = correct_count / len(a3) * 100.0
+print("NN Correct answer rate: ", correct_count, "/", len(a3), " = ", rate )
 
 # [EOF]
