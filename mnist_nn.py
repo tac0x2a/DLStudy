@@ -44,18 +44,21 @@ W32 = np.concatenate((sample_weight['W3'], [sample_weight['b3']]), axis=0)
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-# Calculation
-i = int(rand() * TRAIN_SAMPLE)
+# Batch Calculation
+BATCH_SIZE = 1000
+b = int(rand() * (TRAIN_SAMPLE-BATCH_SIZE))
+e = b + BATCH_SIZE
 
-z0 = np.append(x_train[i], 1)
+z0 = [ np.append(x_train[ii], 1) for ii in range(b, e) ]
 a1 = np.dot(z0, W10)
-z1 = np.append(sigmoid(a1), 1)
+z1 = [ np.append(sigmoid(a), 1) for a in a1 ]
 a2 = np.dot(z1, W21)
-z2 = np.append(sigmoid(a2), 1)
+z2 = [ np.append(sigmoid(a), 1) for a in a2 ]
 a3 = np.dot(z2, W32)
 
-print("NN Output:", a3) # Result
-print("NN Output",  np.argmax(a3)) # Result
-print("Expected:",  int(t_train[i]))
+print("NN Output:", a3.shape) # Result
+result = [ (t_train[b+i], np.argmax(a3[i])) for i in range(0, BATCH_SIZE) ]
+
+print("NN Correct answer rate: ", sum(1 for a,e in result if a == e ) / len(result) * 100.0, "%")
 
 # [EOF]
