@@ -20,21 +20,42 @@ L2 = 100
 L3 = 10
 
 bias = 1
+# By Random
 W10 = np.array( [[rand() for x in range(0, L1)] for xx in range(0, L0 + bias)] )
 W21 = np.array( [[rand() for x in range(0, L2)] for xx in range(0, L1 + bias)] )
 W32 = np.array( [[rand() for x in range(0, L3)] for xx in range(0, L2 + bias)] )
+
+# By sample Weights
+path = "./mnist_data/sample_weight.pkl"
+import os.path
+if not os.path.exists(path):
+    import urllib
+    url = "https://github.com/oreilly-japan/deep-learning-from-scratch/raw/master/ch03/sample_weight.pkl"
+    urllib.request.urlretrieve(url, path)
+
+with open(path, "rb") as f:
+    import pickle
+    sample_weight = pickle.load(f)
+
+W10 = np.concatenate((sample_weight['W1'], [sample_weight['b1']]), axis=0)
+W21 = np.concatenate((sample_weight['W2'], [sample_weight['b2']]), axis=0)
+W32 = np.concatenate((sample_weight['W3'], [sample_weight['b3']]), axis=0)
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 # Calculation
-z0 = np.append(x_train[0], 1)
+i = rand() * TRAIN_SAMPLE
+
+z0 = np.append(x_train[i], 1)
 a1 = np.dot(z0, W10)
 z1 = np.append(sigmoid(a1), 1)
 a2 = np.dot(z1, W21)
 z2 = np.append(sigmoid(a2), 1)
 a3 = np.dot(z2, W32)
 
-print(a3) # Result
+print("NN Output:", a3) # Result
+print("NN Output",  np.argmax(a3)) # Result
+print("Expected:",  t_train[i])
 
 # [EOF]
