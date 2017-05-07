@@ -19,11 +19,11 @@ L1 = 50
 L2 = 100
 L3 = 10
 
-bias = 1
-# By Random
-W10 = np.array( [[rand() for x in range(0, L1)] for xx in range(0, L0 + bias)] )
-W21 = np.array( [[rand() for x in range(0, L2)] for xx in range(0, L1 + bias)] )
-W32 = np.array( [[rand() for x in range(0, L3)] for xx in range(0, L2 + bias)] )
+# By Random #
+# bias = 1
+# W10 = np.array( [[rand() for x in range(0, L1)] for xx in range(0, L0 + bias)] )
+# W21 = np.array( [[rand() for x in range(0, L2)] for xx in range(0, L1 + bias)] )
+# W32 = np.array( [[rand() for x in range(0, L3)] for xx in range(0, L2 + bias)] )
 
 # By sample Weights
 path = "./mnist_data/sample_weight.pkl"
@@ -45,7 +45,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 # Calculation
-i = rand() * TRAIN_SAMPLE
+i = int(rand() * TRAIN_SAMPLE)
 
 z0 = np.append(x_train[i], 1)
 a1 = np.dot(z0, W10)
@@ -56,6 +56,6 @@ a3 = np.dot(z2, W32)
 
 print("NN Output:", a3) # Result
 print("NN Output",  np.argmax(a3)) # Result
-print("Expected:",  t_train[i])
+print("Expected:",  int(t_train[i]))
 
 # [EOF]
