@@ -44,17 +44,22 @@ W32 = np.concatenate((sample_weight['W3'], [sample_weight['b3']]), axis=0)
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-# Batch Calculation
+def through(x):
+    return x
+
+def forward(x, W, func):
+    a = np.dot(x, W)
+    z = func(a)
+    return np.array([ np.append(zz, 1) for zz in z ])
+
 BATCH_SIZE = 10000
 b = int(rand() * (TRAIN_SAMPLE-BATCH_SIZE))
 e = b + BATCH_SIZE
 
 z0 = [ np.append(x_train[ii], 1) for ii in range(b, e) ]
-a1 = np.dot(z0, W10)
-z1 = [ np.append(sigmoid(a), 1) for a in a1 ]
-a2 = np.dot(z1, W21)
-z2 = [ np.append(sigmoid(a), 1) for a in a2 ]
-a3 = np.dot(z2, W32)
+z1 = forward(z0, W10, sigmoid)
+z2 = forward(z1, W21, sigmoid)
+a3 = forward(z2, W32, through)
 
 print("NN Output:", a3.shape) # Result
 correct_count = sum(t_train[b:b+BATCH_SIZE] == [np.argmax(a) for a in a3 ])
