@@ -4,8 +4,8 @@ import numpy as np
 from numpy.random import *
 
 # Download MNIST Data
-from sklearn.datasets import fetch_mldata
-mnist = fetch_mldata('MNIST original', data_home='./mnist_data')
+import mnist_load as mnist
+mnist = mnist.load('./mnist_data')
 
 # Load MNIST Data
 TRAIN_SAMPLE = 60000
